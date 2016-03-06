@@ -9,11 +9,23 @@
 
                 Accueil
 
-                <hr>
+                {!! Form::open(['method'=>'post', 'url'=> route('recherche')]) !!}
 
-                <h1 class="text-right">
-                    Bonjour {!! $user->prenom !!} !
-                </h1>
+                <div class="form-group">
+                    {!! Form::text('research', null, ['class'=>'form-control']) !!}
+                </div>
+
+                {!! Form::close() !!}
+
+                <div class="col-md-6">
+                    <h4>Bonjour {!! $user->prenom !!} !</h4>
+                </div>
+
+                <div class="col-md-6 text-right">
+                    <h3>{{count($user_inscrit)}} cours</h3> auxquels vous vous êtes inscrit
+                    <H3>{{count($nb_quizz)}} Quizz</H3> effectués
+                </div>
+
 
                 <div class="panel panel-default">
 
@@ -26,7 +38,6 @@
                         <ul class="list-group">
 
                             @foreach($cours as $c)
-
                                 <li class="list-group-item">
                                     <h4 class="list-group-item-heading">
                                         <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">{!! $c->titre !!}</a>
