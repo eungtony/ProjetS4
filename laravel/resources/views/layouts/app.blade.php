@@ -68,9 +68,10 @@
                 @if (Auth::guest())
                     <li><a href="{{ url('/login') }}">Connexion</a></li>
                     <li><a href="{{ url('/register') }}">Inscription</a></li>
+                    <li><a href="{{ url('/validermoncompte') }}">Validez mon compte</a></li>
                 @else
 
-                    <img src="/laravel/public/{{Auth::user()->avatar}}" alt="" style="width:30px; border-radius:30px; margin-top:15px;">
+                    <img src="img/avatars/{{Auth::user()->avatar}}" alt="" style="width:30px; border-radius:30px; margin-top:15px;">
                     <li><a href="{{ route('profil') }}">Profil</a></li>
                     <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Déconnexion</a></li>
                 @endif
