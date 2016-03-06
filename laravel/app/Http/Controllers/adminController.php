@@ -52,7 +52,7 @@ class adminController extends Controller
         $domaines = Domaine::lists('nom', 'id');
         $difficulte = Difficulte::lists('nom', 'id');
         $user = $this->auth->user();
-        $chapitres = Chapitre::all()->where('cours_id', $cours_id);
+        $chapitres = Chapitre::with('souschapitres')->where('cours_id', $cours_id)->get();
         $chapitres->load('souschapitres');
         $quizz = DB::table('quizz')
             ->get();
@@ -60,7 +60,7 @@ class adminController extends Controller
     }
 
     public function store(Requests\coursRequest $request) {
-        $cours = Cours::create($request->only('titre', 'objectif', 'domaine_id', 'user_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures'));
+        $cours = Cours::create($request->only('titre', 'image', 'objectif', 'domaine_id', 'user_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures'));
         return back()->with('success', 'Le cours a bien été créee ! Rédiger désormais le premier chapitre de votre cours !');
 
     }
@@ -69,7 +69,7 @@ class adminController extends Controller
         $user = $this->auth->user();
         $domaines = Domaine::lists('nom', 'id');
         $chapitres = Chapitre::where('cours_id', $cours->id)->get();
-        $cours->update($request->only('titre', 'objectif', 'domaine_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures'));
+        $cours->update($request->only('titre', 'objectif', 'domaine_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures', 'image'));
         return redirect(action('adminController@edit', compact('cours', 'domaines', 'user', 'chapitres')))->with('success', 'Le cours a bien été modifié !');
     }
 

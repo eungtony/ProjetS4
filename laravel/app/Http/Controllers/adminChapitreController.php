@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exercices;
 use App\Quizz;
+use App\Quizz_questions;
+use App\Quizz_reponses;
 use App\Souschapitre;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -49,7 +51,7 @@ class adminChapitreController extends Controller
     public function create($id){
         $chapitre = new Chapitre;
         $user = $this->auth->user();
-        $cours = DB::table('cours')->where('id', $id)->get()[0];
+        $cours = Cours::where('id', $id)->get()[0];
         return view('admin.chapitre.create', compact('chapitre','user','cours'));
     }
 
@@ -64,9 +66,8 @@ class adminChapitreController extends Controller
         $user = $this->auth->user();
         $chap_id = $chapitres->id;
         $quizz_id = $chapitres->quizz_id;
-        $quizz_questions = DB::table('quizz_questions')
+        $quizz_questions = Quizz_questions::where('chapitre_id', $chapitres->id)
             ->orderBy('ordre')
-            ->where('chapitre_id', $chapitres->id)
             ->get();
         $exercices = Exercices::where('chapitre_id', $chapitres->id)->get();
         $quizz = new Quizz();
@@ -93,8 +94,8 @@ class adminChapitreController extends Controller
     public function store(Requests\chapitreRequest $request){
         //dd($request->cours_id);
         Chapitre::create($request->only('chapitre_titre', 'contenu', 'chapitre_slug', 'cours_id', 'numero', 'user_id', 'url_video', '_token'));
-        $titre = $request->request->all()['titre'];
-        $chap_id = Chapitre::where('titre', $titre)->get()[0]->id;
+        $titre = $request->request->all()['chapitre_titre'];
+        $chap_id = Chapitre::where('chapitre_titre', $titre)->get()[0]->id;
         DB::table('quizz')->insert(['chapitre_id'=>$chap_id, 'user_id' =>$this->auth->user()->id]);
         $quizz_id = DB::table('quizz')->where('chapitre_id', $chap_id)->where('user_id', $this->auth->user()->id)->get()[0]->id;
         Chapitre::where('id', $chap_id)->update(['quizz_id' => $quizz_id]);
@@ -110,8 +111,8 @@ class adminChapitreController extends Controller
         Chapitre::where('id', $chapitre->id)->delete();
         Souschapitre::where('chapitre_id', $chapitre->id)->delete();
         DB::table('quizz')->where('chapitre_id', $chapitre->id)->delete();
-        DB::table('quizz_questions')->where('quizz_id', $chapitre->quizz_id)->delete();
-        DB::table('quizz_reponses')->where('quizz_id', $chapitre->quizz_id)->delete();
+        Quizz_questions::where('quizz_id', $chapitre->quizz_id)->delete();
+        Quizz_reponses::where('quizz_id', $chapitre->quizz_id)->delete();
         DB::table('users_reponses')->where('quizz_id', $chapitre->quizz_id)->delete();
         return back()->with('success', 'Le chapitre a bien été supprimé !');
     }

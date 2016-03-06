@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\chapitre_users;
 use App\Cours;
-use App\Cours_Users;
+use App\Cours_users;
 use App\Http\Requests;
 use App\Quizz_users;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class HomeController extends Controller
 {
@@ -49,6 +50,7 @@ class HomeController extends Controller
             ->orderBy('cours_users.id', 'desc')
             ->take(4)
             ->get();
+        $user_inscrit = Cours_Users::where('user_id', $user->id)->get();
 
         $quizz = Quizz_users::where('quizz_users.user_id', $user->id)
             ->join('quizz', 'quizz.id', '=', 'quizz_users.quizz_id')
@@ -57,8 +59,9 @@ class HomeController extends Controller
             ->join('domaines', 'domaines.id', '=','cours.domaine_id')
             ->take(4)
             ->get();
+        $nb_quizz = Quizz_users::where('user_id', $user->id)->get();
 
-        return view('home', compact('user', 'cours', 'liked', 'recents', 'inscrit', 'quizz'));
+        return view('home', compact('user', 'cours', 'liked', 'recents', 'inscrit', 'nb_quizz', 'quizz', 'user_inscrit'));
     }
 
     public function admin(){
@@ -66,5 +69,18 @@ class HomeController extends Controller
         $cours = Cours::where('user_id', $user_id)->orderBy('id', 'desc')->get();
         $cours->load('domaine');
         return view('admin.index', compact('cours'));
+    }
+
+    public function recherche(){
+        $rs = Input::get('research');
+        $recherche = explode(' ', $rs);
+        $data = Cours::with('domaine');
+        foreach($recherche as $r){
+            $data->where('titre', 'LIKE', '%'.$r.'%');
+        }
+
+        $resultat = $data->get();
+        return view('recherche', compact('resultat', 'rs'));
+
     }
 }
