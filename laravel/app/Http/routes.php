@@ -35,14 +35,23 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/home', 'HomeController@index');
     Route::get('/', [ 'uses' => 'HomeController@index', 'as' => 'home']);
+    Route::get('/validermoncompte', ['uses'=>'Auth\AuthController@valider', 'as'=>'valider']);
+    Route::post('/validate', ['uses'=>'Auth\AuthController@validation', 'as'=>'validation']);
     Route::get('/confirm/{id}/{confirmation_token}', ['uses' => 'Auth\AuthController@getConfirm']);
     Route::get('/profil', ['uses' => 'UsersController@edit', 'as' => 'profil']);
     Route::post('/profil', ['uses' => 'UsersController@update', 'as' => 'update']);
+    Route::get('/profil/preferences', ['uses'=>'UsersController@preferences', 'as' => 'preferences']);
+    Route::get('/profil/mescours', ['uses'=>'UsersController@mescours', 'as' => 'profil.mes.cours']);
+    Route::get('/profil/modifiermonmotdepasse', ['uses'=>'UsersController@modifiermotdepasse', 'as'=>'profil.password']);
+    Route::get('profil/cours/online', ['uses' => 'UsersController@online', 'as'=>'cours.online']);
+    Route::get('profil/cours/offline', ['uses' => 'UsersController@offline', 'as'=>'cours.offline']);
     Route::get('/profil/{id}', ['uses' => 'UsersController@view', 'as' => 'voir.profil']);
     Route::get('/profil/{id}/cours', ['uses' => 'UsersController@cours', 'as' => 'profil.cours']);
     Route::get('/profil/{id}/quizz', ['uses'=>'UsersController@quizz', 'as'=>'profil.quizz']);
     Route::get('/profil/{id}/{idquizz}/mesreponses', ['uses'=>'UsersController@correction', 'as'=>'profil.quizz.correction']);
+    Route::post('/profil/modifiermonmotdepasse/{id}', ['uses'=>'UsersController@checkpassword', 'as'=>'profil.check.password']);
 
+    Route::post('/recherche', ['uses'=>'HomeController@recherche', 'as'=>'recherche']);
     Route::get('/cours', ['uses' => 'coursController@index', 'as' => 'nos.cours']);
     Route::get('cours/{nomdomaine}', ['uses' => 'coursController@domaine', 'as' => 'voir.cours.domaine']);
     Route::get('cours/{slugdomaine}/{slug}', ['uses' => 'coursController@show', 'as' => 'voir.cours']);
