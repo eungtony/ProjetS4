@@ -4,7 +4,9 @@
 
 @section('title') Rédiger un nouveau cours @endsection
 
-<h3>Rédiger un cours</h3>
+<div class="wi80">
+
+    <h3>Rédiger un cours</h3>
 
     @include('admin.cours.form', ['action' => 'store'])
 
@@ -14,5 +16,6 @@
 
     {!! Form::close() !!}
 
+</div>
 
 @endsection

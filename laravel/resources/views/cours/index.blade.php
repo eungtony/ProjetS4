@@ -4,20 +4,33 @@
 
 @section('title') Découvrez tous nos cours !  @endsection
 
-<div class="col-md-8 col-md-offset-2 text-center">
+<p class="text-left"><a href="{{route('home')}}">Accueil</a> > Nos cours</p>
 
-    <p class="text-left"><a href="{{route('home')}}">Accueil</a> > Nos cours</p>
+<div class="wi80">
 
-        @foreach($domaines as $d)
-            <h3><a href="{{route('voir.cours.domaine', $d->slug)}}">{{$d->nom}} ({{count($d->cours)}})</a></h3>
-            @foreach($d->cours as $c)
-                @if($c->online == 1)
-                <a href="{{route('voir.cours', [$d->slug, $c->cours_slug])}}" class="btn btn-primary">{{$c->titre}}</a><br>
-                @endif
-                @endforeach
-            <hr>
-        @endforeach
+    @foreach($cours->chunk(4) as $chunk)
 
-    </div>
+        <div class="group grid-4" style="margin:auto;">
+            @foreach($chunk as $c)
+                <div class="cours">
+                    <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">
+                        <img src="/~tony/img/cours/{{$c->id}}_miniature.jpg" class="miniature"
+                             style="box-shadow: 0 0 6px black;">
+                    </a>
+                    <img src="/~tony/images/titrecours.png" class="imgcours">
+                    <p class="titredomaine"><a href="{{route('voir.cours.domaine', $c->domaine->slug)}}"
+                                               style="color:white;">{{$c->domaine->nom}}</a></p>
+                    <p class="titrecours">
+                        <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">{!! $c->titre !!}</a>
+                    </p>
+                </div>
+            @endforeach
+        </div>
 
-    @endsection
+    @endforeach
+
+    {{$cours->links()}}
+
+</div>
+
+@endsection

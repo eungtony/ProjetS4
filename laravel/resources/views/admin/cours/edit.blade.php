@@ -4,7 +4,8 @@
 
 @section('title') Editer le cours {{$cours->titre}} @endsection
 
-<h2>Modifier le cours: {!! $cours->titre !!}</h2>
+<div class="wi80">
+    <h2 class="text-right">Modifier le cours: {!! $cours->titre !!}</h2>
 
     @include('admin.cours.form', ['action' => 'update'])
 
@@ -29,19 +30,21 @@
                     <span>
                         <a href="{{route('admin.schapitre.create',$chapitre->id)}}"><i class="fa fa-plus"></i></a>
                     </span>
-                    <a href="{{route('admin.chapitre.destroy', $chapitre->id)}}" data-method="delete" data-confirm="Souhaitez-vous réellement supprimer ce chapitre ?">
+                    <a href="{{route('admin.chapitre.destroy', $chapitre->id)}}" data-method="delete"
+                       data-confirm="Souhaitez-vous réellement supprimer ce chapitre ?">
                         <i class="fa fa-trash"></i>
                     </a>
                 </h4>
                 @foreach($chapitre->souschapitres as $souschapitre)
                     <p><i class="fa fa-pencil-square-o"></i>
-                        - <a href="{{route('admin.schapitre.edit', $souschapitre->id)}}">{{$souschapitre->titre}}</a></p>
+                        - <a href="{{route('admin.schapitre.edit', $souschapitre->id)}}">{{$souschapitre->titre}}</a>
+                    </p>
                 @endforeach
                 <hr>
             @endforeach
         </div>
 
     </div>
-
+</div>
 
 @endsection

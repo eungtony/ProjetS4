@@ -13,26 +13,30 @@
 
 @section('title') Inscrivez-vous à ce cours ! @endsection
 
-<div class="panel panel-warning text-center">
+<div class="wi80">
 
-    <div class="panel-heading">
-        <h3 style="color:white;">Inscris-toi à ce cours: {{$c->titre}} !</h3>
-    </div>
+    <div class="panel panel-warning text-center">
 
-    <div class="panel-body">
-        <p>Il semble que tu ne sois pas inscrit à ce cours !
-            Tu peux t'inscrire à ce cours en cliquant sur le bouton ci-dessous !</p>
+        <div class="panel-heading">
+            <h3 style="color:white;">Inscris-toi à ce cours: {{$c->titre}} !</h3>
+        </div>
 
-        {!! Form::open([
-    'url' => action("coursController@inscription"),
-    'method' => 'post']) !!}
+        <div class="panel-body">
+            <p>Il semble que tu ne sois pas inscrit à ce cours !
+                Tu peux t'inscrire à ce cours en cliquant sur le bouton ci-dessous !</p>
 
-        {!! Form::hidden('domaine_id', $c->domaine->id, ['class'=>'form-control']) !!}
-        {!! Form::hidden('cours_id', $c->id, ['class'=>'form-control']) !!}
-        {!! Form::hidden('user_id', Auth::user()->id, ['class'=>'form-control']) !!}
+            {!! Form::open([
+        'url' => action("coursController@inscription"),
+        'method' => 'post']) !!}
+
+            {!! Form::hidden('domaine_id', $c->domaine->id, ['class'=>'form-control']) !!}
+            {!! Form::hidden('cours_id', $c->id, ['class'=>'form-control']) !!}
+            {!! Form::hidden('user_id', Auth::user()->id, ['class'=>'form-control']) !!}
 
 
-        <button type="submit" class="btn btn-primary">Inscris à toi à ce cours !</button>
+            <button type="submit" class="btn btn-link">Inscris à toi à ce cours !</button>
+        </div>
+
     </div>
 
 </div>
@@ -41,7 +45,7 @@
 
 @section('title'){{$c->titre}} @endsection
 
-<div class="col-md-8 col-md-offset-2 text-justify">
+<div class="wi80" style="padding:20px;">
 
     <h3 class="text-center">{!! $c->titre !!} </h3>
 
@@ -51,9 +55,30 @@
 
     <hr>
 
+    <h4 class="text-center">Votre progression dans ce cours</h4>
+
+    <h3>{{count($total_quiz)}}/{{count($chapitres)}}</h3>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{count($total_quiz)}}"
+             aria-valuemin="0" aria-valuemax="{{count($chapitres)}}" style="width:{{$pc}}%">
+            <span class="sr-only">70% Complete</span>
+        </div>
+    </div>
+
+    <hr>
+
+    <img src="/~tony/img/cours/{{$c->image}}" style="width:100%">
+
+    <p class="alert alert-warning text-center">
+
+        Vous avez un peu de mal avec ce cours ? Posez vos questions sur le forum:<br>
+        <a href="{{route('voir.forum.cours', [$c->domaine->slug, $c->cours_slug])}}">{{$c->titre}}</a>
+
+    </p>
+
     @if($c->url_video != null)
         <div class="panel-header">
-            <iframe width="715" height="415" style="margin:10px;" src="{{$c->url_video}}" frameborder="0"
+            <iframe width="100%" height="500px" style="margin:10px;" src="{{$c->url_video}}" frameborder="0"
                     allowfullscreen></iframe>
         </div>
     @else
@@ -64,38 +89,29 @@
 
     <p>{!! $c->objectif !!}</p>
 
-    <a href="{!! route('voir.cours.domaine', $c->domaine->slug)!!}" class="btn btn-primary">{!! $c->domaine->nom !!}</a>
-
-    <p>Rédigé par <a href="{{ route('voir.profil', $c->user->id)}}">{!! $c->user->prenom !!}</a></p>
-
     <div>
 
-        <div class="panel-header"><h3>Déroulement du cours</h3></div>
+</div>
 
-        @if($c->user_id == Auth::user()->id)
-            <a href="{{route('admin.edit', $c->id)}}" class="text-right btn btn-primary">Editer le cours</a>
-        @endif
+    <div class="panel-header"><h3>Déroulement du cours</h3></div>
 
-        <div class="panel-body">
-            @foreach($chapitres as $chapitre)
-                <h3>
-                    @if($quizz->quizz_id == $chapitre->quizz_id)
-                        <i class="fa fa-check-circle"></i>
-                    @else
-                        <i class="fa fa-check-circle-o"></i>
-                    @endif
-                    {!! $chapitre->numero !!} -
-                    <a href="
-                                {!! route('voir.chapitre', [$c->domaine->slug,$c->cours_slug, $chapitre->chapitre_slug]) !!}">{!! $chapitre->chapitre_titre !!}
-                    </a>
-                </h3>
-                @foreach($chapitre->souschapitres as $souschapitre)
-                    <p>{!! $souschapitre->numero !!} - {!! $souschapitre->titre !!}</p>
-                @endforeach
+    @if($c->user_id == Auth::user()->id)
+        <a href="{{route('admin.edit', $c->id)}}" class="text-right btn btn-primary">Editer le cours</a>
+    @endif
+
+    <div class="panel-body">
+        @foreach($chapitres as $chapitre)
+            <h3>
+                {!! $chapitre->numero !!} -
+                <a href="
+                    {!! route('voir.chapitre', [$c->domaine->slug,$c->cours_slug, $chapitre->chapitre_slug]) !!}">{!! $chapitre->chapitre_titre !!}
+                </a>
+            </h3>
+            @foreach($chapitre->souschapitres as $souschapitre)
+                <p>{!! $souschapitre->numero !!} - {!! $souschapitre->titre !!}</p>
             @endforeach
-        </div>
+        @endforeach
     </div>
-
 </div>
 
 @endif

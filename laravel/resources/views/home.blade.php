@@ -3,161 +3,149 @@
 @section('title') Accueil @endsection
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1">
 
-                Accueil
+    <h1>Tableau de bord</h1>
 
-                {!! Form::open(['method'=>'post', 'url'=> route('recherche')]) !!}
+    <!-- Partie Cours -->
+    <div class="wi80">
+        <h1><i class="fa fa-fire"></i> Nouveaux Cours</h1>
 
-                <div class="form-group">
-                    {!! Form::text('research', null, ['class'=>'form-control']) !!}
+        <hr>
+
+        <div class="group grid-4" style="margin:auto; padding-top:5px;">
+            @foreach($cours as $c)
+                <div class="cours">
+                    <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">
+                        <img src="/~tony/img/cours/{{$c->id}}_miniature.jpg" class="miniature"
+                             style="box-shadow: 0 0 6px black;">
+                    </a>
+                    <img src="/~tony/images/titrecours.png" class="imgcours">
+                    <p class="titredomaine"><a href="{{route('voir.cours.domaine', $c->domaine->slug)}}"
+                                               style="color:white;">{{$c->domaine->nom}}</a></p>
+                    <p class="titrecours">
+                        <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">{!! $c->titre !!}</a>
+                    </p>
                 </div>
-
-                {!! Form::close() !!}
-
-                <div class="col-md-6">
-                    <h4>Bonjour {!! $user->prenom !!} !</h4>
-                </div>
-
-                <div class="col-md-6 text-right">
-                    <h3>{{count($user_inscrit)}} cours</h3> auxquels vous vous êtes inscrit
-                    <H3>{{count($nb_quizz)}} Quizz</H3> effectués
-                </div>
-
-
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">Dashboard</div>
-
-                    <div class="panel-body">
-
-                        <h4>Nouveaux cours</h4>
-
-                        <ul class="list-group">
-
-                            @foreach($cours as $c)
-                                <li class="list-group-item">
-                                    <h4 class="list-group-item-heading">
-                                        <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">{!! $c->titre !!}</a>
-                                    </h4>
-                                    <p class="list-group-item-text">
-                                        {{substr(strip_tags($c->objectif),0, 300)}}...
-                                    <p class="text-right">
-                                        <a href="{{route('voir.cours.domaine', $c->domaine->slug)}}">{{$c->domaine->nom}}</a>
-
-                                    </p>
-                                    </p>
-                                </li>
-
-                            @endforeach
-
-                        </ul>
-
-                        <p class="text-right">
-                            <a href="{{route('nos.cours')}}">Voir tous nos cours</a>
-                        </p>
-
-                        <h4>Ces cours devraient vous intéresser ...</h4>
-
-                        @if($liked->isEmpty())
-
-                            <p class="alert alert-warning">Désolé nous n'avons pas trouvé de cours qui pourrait vous
-                                intéresser...</p>
-
-                        @else
-
-                            <ul class="list-group">
-                                @foreach($liked as $like)
-
-                                    <li class="list-group-item">
-                                        <h4 class="list-group-item-heading">
-                                            <a href="{{route('voir.cours', [$like->domaine->slug, $like->cours_slug])}}">{!! $like->titre !!}</a>
-                                        </h4>
-                                        <p class="list-group-item-text">
-                                            {{substr(strip_tags($like->objectif),0, 300)}}...
-                                        <p class="text-right">
-                                            <a href="{{route('voir.cours.domaine', $like->domaine->slug)}}">{{$like->domaine->nom}}</a>
-
-                                        </p>
-                                        </p>
-                                    </li>
-
-                                @endforeach
-                            </ul>
-
-                        @endif
-
-                        <h4>Derniers cours auxquels vous vous êtes inscrit</h4>
-
-                        @if($inscrit->isEmpty())
-                            <p class="alert alert-warning">Vous ne vous êtes inscrit à aucun cours !</p>
-                        @else
-                            <ul class="list-group">
-                                @foreach($inscrit as $i)
-                                    @if($i->online == 1)
-
-                                        <li class="list-group-item">
-                                            <h4 class="list-group-item-heading">
-                                                <a href="{{route('voir.cours', [$i->slug, $i->cours_slug])}}">{{$i->titre}}</a>
-                                            </h4>
-                                            <p class="list-group-item-text">
-                                                {{substr(strip_tags($i->objectif),0, 300)}}...
-                                            <p class="text-right">
-                                                <a href="{{route('voir.cours.domaine', $i->slug)}}">{{$i->nom}}</a>
-                                            </p>
-                                            </p>
-                                        </li>
-
-                                    @endif
-                                @endforeach
-                            </ul>
-
-                            <p class="text-right"><a href="{{route('profil.cours', $user->id)}}">Voir tous mes cours</a>
-                            </p>
-
-                        @endif
-
-
-                        <h4>QUIZZ effectué</h4>
-
-                        @if($quizz->isEmpty())
-
-                            <p class="alert alert-warning">
-
-                                Vous n'avez répondu à aucun QUIZ !
-
-                            </p>
-
-                        @else
-
-                            <ul class="list-group">
-
-                                @foreach($quizz as $q)
-
-                                    <li class="list-group-item col-md-4">
-                                        <h4>
-                                            <a href="{{route('voir.chapitre', [$q->slug, $q->cours_slug, $q->chapitre_slug])}}">{{$q->chapitre_titre}}</a>
-                                        </h4>
-                                        <p>du cours <a
-                                                    href="{{route('voir.cours', [$q->slug, $q->cours_slug])}}">{{$q->titre}}</a>
-                                        </p>
-                                        <h3 class="alert alert-warning">
-                                            Résultat: {{$q->note_user}}/{{$q->note_max}}
-                                        </h3>
-                                    </li>
-
-                                @endforeach
-                                <p class="text-right">
-                                    <a href="{{route('profil.quizz', $user->id)}}">Voir tous mes QUIZ</a>
-                                </p>
-                            </ul>
-
-                        @endif
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
+        <div class="text-right">
+            <a href="{{route('nos.cours')}}">Voir tous les nouveaux cours</a>
+        </div>
+
     </div>
+    <div class="wi80">
+        <h1><i class="fa fa-thumbs-up"></i>Ces cours devraient vous intéresser !</h1>
+
+        <hr>
+
+        <div class="group grid-4" style="margin:auto; padding-top:5px;">
+            @foreach($liked as $l)
+                <div class="cours">
+                    <a href="{{route('voir.cours', [$l->domaine->slug, $l->cours_slug])}}">
+                        <img src="/~tony/img/cours/{{$l->id}}_miniature.jpg" class="miniature"
+                             style="box-shadow: 0 0 6px black;">
+                    </a>
+                    <img src="/~tony/images/titrecours.png" class="imgcours">
+                    <p class="titredomaine"><a href="{{route('voir.cours.domaine', $l->domaine->slug)}}"
+                                               style="color:white;">{{$l->domaine->nom}}</a></p>
+                    <p class="titrecours">
+                        <a href="{{route('voir.cours', [$l->domaine->slug, $l->cours_slug])}}">{!! $l->titre !!}</a>
+                    </p>
+                </div>
+            @endforeach
+        </div>
+        <div class="text-right">
+            <a href="{{route('preferences')}}">Voir tous les cours qui devraient m'intéresser</a>
+        </div>
+
+    </div>
+    <div class="wi80">
+        <h1><i class="fa fa-spinner"></i> Liste de mes cours en progression</h1>
+
+        <hr>
+
+        @if($inscrit->isEmpty())
+            <p class="alert alert-warning">
+
+                Vous ne vous êtes inscrit à aucun cours !
+
+            </p>
+        @else
+
+            <div class="group grid-4" style="margin:auto; padding-top:5px;">
+
+                @foreach($inscrit as $i)
+                    <div class="cours">
+                        <a href="{{route('voir.cours', [$i->slug, $i->cours_slug])}}">
+                            <img src="/~tony/img/cours/{{$i->cours_id}}_miniature.jpg" class="miniature"
+                                 style="box-shadow: 0 0 6px black;">
+                        </a>
+                        <img src="/~tony/images/titrecours.png" class="imgcours">
+                        <p class="titredomaine"><a href="{{route('voir.cours.domaine', $i->slug)}}"
+                                                   style="color:white;">{{$i->nom}}</a></p>
+                        <p class="titrecours">
+                            <a href="{{route('voir.cours', [$i->slug, $i->cours_slug])}}">{{$i->titre}}</a>
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+        <div class="text-right">
+            <a href="{{route('profil.mes.cours')}}">Voir tous les cours auxquels je suis inscris</a>
+        </div>
+
+    </div>
+    <!-- Fin-->
+
+    <div class="wi80">
+
+
+        <h1><i class="fa fa-question-circle"></i> QUIZZ effectué</h1>
+
+        <hr>
+
+        @if($quizz->isEmpty())
+
+            <p class="alert alert-warning">
+
+                Vous n'avez répondu à aucun QUIZ !
+
+            </p>
+
+        @else
+
+            <div class="group grid_4">
+
+                <table class="table table-striped">
+                    <tread>
+                        <tr>
+                            <th>Titre du chapitre</th>
+                            <th>Titre du cours</th>
+                            <th>Module du cours</th>
+                            <th>Résultat du Quiz</th>
+                        </tr>
+                    </tread>
+                    <tbody>
+                    @foreach($quizz as $q)
+
+                        <tr>
+                            <td><a href="{{route('voir.chapitre', [$q->slug, $q->cours_slug, $q->chapitre_slug])}}">{{$q->chapitre_titre}}</a></td>
+                            <td><a href="{{route('voir.cours', [$q->slug, $q->cours_slug])}}">{{$q->titre}}</a></td>
+                            <td><a href="{{route('voir.cours.domaine', $q->slug)}}">{{$q->nom}}</a></td>
+                            <td>{{$q->note_user}}/{{$q->note_max}}</td>
+                        </tr>
+
+                    @endforeach
+                    </tbody>
+                </table>
+
+                    <p class="text-right">
+                        <a href="{{route('profil.quizz', $user->id)}}">Voir tous mes QUIZ</a>
+                    </p>
+            </div>
+
+        @endif
+
+    </div>
+
 @endsection
