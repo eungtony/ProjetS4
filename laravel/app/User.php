@@ -29,16 +29,16 @@ class User extends Authenticatable
 
     public function getAvatarAttribute($avatar){
         if($avatar){
-            return "img/avatars/{$this->id}.jpg";
+            return "{$this->id}.jpg";
         }else{
-            false;
+            return "default.png";
         }
     }
 
     public function setAvatarAttribute($avatar){
         if(is_object($avatar) && $avatar->isValid()){
             //dd(File::exists(storage_path(public_path()."\img\avatars\".{$this->id}.jpg)));
-            ImageManagerStatic::make($avatar)->fit(150,150)->save(public_path()."/img/avatars/{$this->id}.jpg");
+            ImageManagerStatic::make($avatar)->fit(150,150)->save("/home/tony/public_html/img/avatars/{$this->id}.jpg");
             $this->attributes['avatar'] = true;
         }
     }
@@ -70,7 +70,7 @@ class User extends Authenticatable
     }
 
     public function isAdmin(){
-        return $this->role_id == '3';
+        return $this->statut_id == '2';
     }
 
 }
