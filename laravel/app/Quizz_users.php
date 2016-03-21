@@ -9,4 +9,8 @@ class Quizz_users extends Model
     public function chapitre(){
         return $this->hasOne('App\Chapitre');
     }
+
+    public function cours(){
+        return $this->belongsTo('App\Cours');
+    }
 }
