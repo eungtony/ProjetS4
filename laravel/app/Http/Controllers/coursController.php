@@ -29,24 +29,34 @@ class coursController extends Controller
 
     public function show($slugdomaine, $slug)
     {
-        $cours = Cours::all()->where('cours_slug', $slug);
+        $cours = Cours::where('cours_slug', $slug)->get();
         $cours->load('domaine', 'user', 'difficulte');
         $cours_id = Cours::where('cours_slug', $slug)->get()['0']->id;
-        $chapitres = Chapitre::all()->where('cours_id', $cours_id);
+        $chapitres = Chapitre::where('cours_id', $cours_id)->get();
         $chapitres->load('souschapitres');
         $inscrit = Cours_users::
         where('user_id', $this->auth->user()->id)
             ->where('cours_id', $cours_id)
             ->get();
-            $quiz = Quizz_users::where('quizz_users.user_id', $this->auth->user()->id)
+
+        $total_quiz = Quizz_users::where('quizz_users.user_id', $this->auth->user()->id)
+            ->where('quizz_users.cours_id', $cours_id)
+            ->join('chapitres', 'chapitres.quizz_id', '=','quizz_users.quizz_id')
             ->get();
-        if($quiz->isEmpty()){
+
+        if($total_quiz->isEmpty()){
             $quizz = new Quizz_users();
         }else{
             $quizz = Quizz_users::where('quizz_users.user_id', $this->auth->user()->id)
                 ->get()[0];
         }
-        return view('cours.show', compact('cours', 'chapitres', 'schapitres', 'inscrit', 'quizz'));
+        $last_quizz = $total_quiz->last();
+        if(count($chapitres) == 0){
+            $pc = 1;
+        }else{
+            $pc = 100*count($total_quiz)/count($chapitres);
+        }
+        return view('cours.show', compact('cours', 'chapitres', 'schapitres', 'inscrit', 'quizz', 'last_quizz', 'total_quiz', 'pc'));
     }
 
     public function domaine($slugdomaine)
@@ -54,16 +64,19 @@ class coursController extends Controller
         $domaine = Domaine::where('slug', $slugdomaine)->get()['0'];
         $cours = Cours::with('domaine')
             ->where('domaine_id', $domaine->id)
+            ->where('online',1)
             ->orderBy('id', 'desc')
             ->paginate(10);
-
         return view('cours.domaine.index', compact('cours', 'domaine'));
     }
 
     public function index()
     {
-        $domaines = Domaine::with('users', 'cours')->get();
-        return view('cours.index', compact('domaines'));
+        $cours = Cours::with('domaine')
+            ->orderBy('id', 'desc')
+            ->where('online',1)
+            ->paginate(12);
+        return view('cours.index', compact('cours'));
     }
 
     public function inscription(Request $request)

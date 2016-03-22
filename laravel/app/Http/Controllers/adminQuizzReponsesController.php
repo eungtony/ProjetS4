@@ -17,7 +17,7 @@ class adminQuizzReponsesController extends Controller
         $this->middleware('Admin');
     }
 
-    public function store($id, Request $request){
+    public function store($id, Requests\reponseRequest $request){
         $data = $request->request->all();
         DB::table('quizz_reponses')->insert($data);
         return back()->with('success', 'Votre réponse a bien été ajouté !');
@@ -27,5 +27,10 @@ class adminQuizzReponsesController extends Controller
         $data = $request->only('reponse', 'ordre','id');
         DB::table('quizz_reponses')->where('id', $request->request->all()['id'])->update($data);
         return back()->with('success', 'Votre réponse a bien été modifié !');
+    }
+
+    public function destroy($id){
+        DB::table('quizz_reponses')->where('id', $id)->delete();
+        return back()->with('success', 'La réponse a bien été supprimé !');
     }
 }

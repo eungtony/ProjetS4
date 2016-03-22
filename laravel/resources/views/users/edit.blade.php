@@ -5,9 +5,12 @@
         <div class="container col-md-6 col-md-offset-3">
             <div class="panel-header">Mon compte</div>
             <div class="panel-body">
-                <p class="text-right"><a href="{{route('voir.profil', $user->id)}}" class="btn btn-primary">Voir mon profil</a></p>
+                <p class="text-right">
+                    <a href="{{route('voir.profil', $user->id)}}" class="btn btn-primary">Voir mon profil</a>
+                    <a href="{{url('/profil/modifiermonmotdepasse')}}" class="btn btn-primary">Modifier mon mot de passe</a></A>
+                </p>
                 @if($user->avatar)
-                    <img src="{{$user->avatar}}" alt="{{$user->prenom}}">
+                    <img src="/~tony/img/avatars/{{$user->avatar}}" alt="{{$user->prenom}}">
                     @endif
                 {!! Form::model($user, ['class' => 'form-horizontal', 'files' => true]) !!}
 

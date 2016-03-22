@@ -59,9 +59,8 @@
 
     <h3>{{count($total_quiz)}}/{{count($chapitres)}}</h3>
     <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="{{count($total_quiz)}}"
+        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{count($total_quiz)}}"
              aria-valuemin="0" aria-valuemax="{{count($chapitres)}}" style="width:{{$pc}}%">
-            <span class="sr-only">70% Complete</span>
         </div>
     </div>
 

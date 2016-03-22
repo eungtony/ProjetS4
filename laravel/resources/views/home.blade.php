@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('title') Accueil @endsection
-
-@section('content')
-
     <h1>Tableau de bord</h1>
 
     <!-- Partie Cours -->
@@ -12,7 +9,7 @@
 
         <hr>
 
-        <div class="group grid-4" style="margin:auto; padding-top:5px;">
+        <div class="group grid-4 wow fadeInUp" style="margin:auto; padding-top:5px;">
             @foreach($cours as $c)
                 <div class="cours">
                     <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">
@@ -38,7 +35,7 @@
 
         <hr>
 
-        <div class="group grid-4" style="margin:auto; padding-top:5px;">
+        <div class="group grid-4 wow fadeInUp" style="margin:auto; padding-top:5px;">
             @foreach($liked as $l)
                 <div class="cours">
                     <a href="{{route('voir.cours', [$l->domaine->slug, $l->cours_slug])}}">
@@ -72,7 +69,7 @@
             </p>
         @else
 
-            <div class="group grid-4" style="margin:auto; padding-top:5px;">
+            <div class="group grid-4 wow fadeInUp" style="margin:auto; padding-top:5px;">
 
                 @foreach($inscrit as $i)
                     <div class="cours">
@@ -114,7 +111,7 @@
 
         @else
 
-            <div class="group grid_4">
+            <div class="group grid_4 wow fadeInUp">
 
                 <table class="table table-striped">
                     <tread>

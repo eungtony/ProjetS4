@@ -4,57 +4,57 @@
 
 @section('title') Tous mes Quizz @endsection
 
-<h2>Tous les Quizz auxquels j'ai répondu</h2>
+<div class="wi80 group">
 
-<hr>
+    <h2>Tous les Quizz auxquels j'ai répondu</h2>
 
-<a href="{{back()->getTargetUrl()}}">Revenir vers le dashboard</a>
+    <hr>
 
-<hr>
+    <a href="{{back()->getTargetUrl()}}">Revenir vers le dashboard</a>
 
-@if($quizz->isEmpty())
+    <hr>
 
-    <p class="alert alert-warning">
+    @if($quizz->isEmpty())
 
-        Désolé, nous n'avons trouvé aucun Quizz auxquel vous avez répondu !
+        <p class="alert alert-warning">
 
-    </p>
+            Vous n'avez répondu à aucun QUIZ !
 
-@else
+        </p>
 
+    @else
 
-    <ul class="list-group">
+        <div class="group grid_4">
 
-        @foreach($quizz->chunk(3) as $chunk)
+            <table class="table table-striped">
+                <tread>
+                    <tr>
+                        <th>Titre du chapitre</th>
+                        <th>Titre du cours</th>
+                        <th>Module du cours</th>
+                        <th>Résultat du Quiz</th>
+                    </tr>
+                </tread>
+                <tbody>
+                @foreach($quizz as $q)
 
-            <div class="row">
-
-                @foreach($chunk as $q)
-
-                    <li class="list-group-item col-md-4">
-                        <h4>
+                    <tr>
+                        <td>
                             <a href="{{route('voir.chapitre', [$q->slug, $q->cours_slug, $q->chapitre_slug])}}">{{$q->chapitre_titre}}</a>
-                        </h4>
-                        <p>du cours <a
-                                    href="{{route('voir.cours', [$q->slug, $q->cours_slug])}}">{{$q->titre}}</a>
-                        </p>
-                        <h3 class="alert alert-warning">
-                            Résultat: {{$q->note_user}}/{{$q->note_max}}
-                        </h3>
-                        <p>
-                            <a href="{{route('profil.quizz.correction', [$user->id, $q->quizz_id])}}">Voir le résultat de ce quizz</a>
-                        </p>
-                    </li>
+                        </td>
+                        <td><a href="{{route('voir.cours', [$q->slug, $q->cours_slug])}}">{{$q->titre}}</a></td>
+                        <td><a href="{{route('voir.cours.domaine', $q->slug)}}">{{$q->nom}}</a></td>
+                        <td>{{$q->note_user}}/{{$q->note_max}}</td>
+                    </tr>
 
                 @endforeach
+                </tbody>
+            </table>
 
+        </div>
 
-            </div>
+    @endif
 
-
-        @endforeach
-    </ul>
-
-@endif
+</div>
 
 @endsection

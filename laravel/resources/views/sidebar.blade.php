@@ -12,7 +12,7 @@ $prof = User::where('statut_id', 2)->get();
 
 ?>
 
-<div class="sidebar flex-item-double">
+<div class="sidebar flex-item-double wow fadeInLeftBig">
     <h1>Module</h1>
     <ul>
         @foreach($domaines as $d)

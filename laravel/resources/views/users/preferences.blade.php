@@ -1,21 +1,17 @@
 @extends('layouts.app')
 
+@section('title') Cours qui devraient m'intéressés @endsection
+
 @section('content')
 
-@section('title') Découvrez tous nos cours !  @endsection
+    <div class="wi80">
 
-<p class="text-left"><a href="{{route('home')}}">Accueil</a> > Nos cours</p>
+        <h4>Nous avons trouvé {{count($cours)}} cours qui pourraient vous intéresser.</h4>
 
-<div class="wi80">
+        <hr>
 
-    <h1>Découvrez tous nos cours !</h1>
-
-    <hr>
-
-    @foreach($cours->chunk(4) as $chunk)
-
-        <div class="group grid-4" style="margin:auto;">
-            @foreach($chunk as $c)
+        <div class="group grid-4" style="margin:auto; padding-top:5px;">
+            @foreach($cours as $c)
                 <div class="cours">
                     <a href="{{route('voir.cours', [$c->domaine->slug, $c->cours_slug])}}">
                         <img src="/~tony/img/cours/{{$c->id}}_miniature.jpg" class="miniature"
@@ -31,10 +27,8 @@
             @endforeach
         </div>
 
-    @endforeach
+        {{$cours->links()}}
 
-    {{$cours->links()}}
-
-</div>
+    </div>
 
 @endsection

@@ -5,11 +5,13 @@
     <div class="wi80">
 
         @if(count($resultat)>1)
-            {{count($resultat)}} Cours associés à votre recherche: {{$rs}}
+            <h1>{{count($resultat)}} Cours associés à votre recherche: {{$rs}}</h1>
         @else
-            {{count($resultat)}} Cours associé à votre recherche: {{$rs}}
+            <h1>{{count($resultat)}} Cours associé à votre recherche: {{$rs}}</h1>
 
         @endif
+
+            <hr>
 
         <div class="group grid-4" style="margin:auto; padding-top:5px;">
             @foreach($resultat as $r)

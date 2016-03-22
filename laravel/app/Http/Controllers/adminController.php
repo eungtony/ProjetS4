@@ -34,8 +34,7 @@ class adminController extends Controller
 
     public function show() {
         $user_id = $this->auth->user()->id;
-        $cours = Cours::where('user_id', $user_id)->orderBy('id', 'desc')->get();
-        $cours->load('domaine');
+        $cours = Cours::with('domaine')->where('user_id', $user_id)->orderBy('id', 'desc')->paginate(5);
         return view('admin.index', compact('cours'));
     }
 
@@ -61,7 +60,7 @@ class adminController extends Controller
 
     public function store(Requests\coursRequest $request) {
         $cours = Cours::create($request->only('titre', 'image', 'objectif', 'domaine_id', 'user_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures'));
-        return back()->with('success', 'Le cours a bien été créee ! Rédiger désormais le premier chapitre de votre cours !');
+        return redirect(route('admin.dashboard'))->with('success', "Le cours a bien été créee ! Mais il n'est pas encore en ligne, modifiez-le avant de le publier !");
 
     }
 
@@ -69,13 +68,14 @@ class adminController extends Controller
         $user = $this->auth->user();
         $domaines = Domaine::lists('nom', 'id');
         $chapitres = Chapitre::where('cours_id', $cours->id)->get();
-        $cours->update($request->only('titre', 'objectif', 'domaine_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures', 'image'));
+        $cours->update($request->only('titre', 'objectif','domaine_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures', 'image'));
         return redirect(action('adminController@edit', compact('cours', 'domaines', 'user', 'chapitres')))->with('success', 'Le cours a bien été modifié !');
     }
 
     public function destroy($cours){
         $chapitre = Chapitre::where('cours_id', $cours->id)->delete();
         $schapitre = Souschapitre::where('cours_id', $cours->id)->delete();
+        DB::table('cours_users')->where('cours_id', $cours->id)->delete();
         $cours->delete();
         return back()->with('success', 'Le cours a bien été supprimé !');
     }

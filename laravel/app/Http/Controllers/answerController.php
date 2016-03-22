@@ -22,7 +22,7 @@ class answerController extends Controller
         $sujet_id = $request->request->all()['sujet_id'];
         $sujet = Sujet::where('id', $sujet_id)->get()[0];
         $sujet_slug = $sujet->slug;
-        $cours_slug = Cours::where('id', $sujet->cours_id)->get()[0]->slug;
+        $cours_slug = Cours::where('id', $sujet->cours_id)->get()[0]->cours_slug;
         $domaine_id = $sujet->domaine_id;
         $domaine_slug = Domaine::where('id', $domaine_id)->get()[0]->slug;
         Answer::create($request->only('contenu', 'user_id', 'sujet_id'));

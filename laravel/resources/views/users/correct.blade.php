@@ -2,33 +2,35 @@
 
 @section('content')
 
-    @section('title') Résultat du QUIZZ sur: {{$titre}} @endsection
+@section('title') Résultat du QUIZZ sur: {{$titre}} @endsection
+
+<div class="wi80">
 
     <h3>
         Résultat du QUIZZ sur: {{$titre}}!
     </h3>
 
-        @foreach($user_reponses as $u)
+    @foreach($user_reponses as $u)
 
-            <h4>{{$u->question}}</h4>
-            @if($u->correct == 1)
+        <h4>{{$u->question}}</h4>
+        @if($u->correct == 1)
 
-                <p class="alert alert-success">
-                    {{$u->reponse}}<br>
-                    Votre réponse est correct !
-                </p>
+            <p class="alert alert-success">
+                {{$u->reponse}}<br>
+                Votre réponse est correct !
+            </p>
 
-            @else
+        @else
 
-                <p class="alert alert-danger">
-                    {{$u->reponse}}<br>
-                    Votre réponse est fausse !
-                </p>
+            <p class="alert alert-danger">
+                {{$u->reponse}}<br>
+                Votre réponse est fausse !
+            </p>
 
-            @endif
+        @endif
 
-            <hr>
-        @endforeach
+        <hr>
+    @endforeach
 
 
     @if($note_user > $notemax/2)
@@ -44,5 +46,7 @@
         </h3>
 
     @endif
+
+</div>
 
 @endsection

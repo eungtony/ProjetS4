@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use App\Cours;
 use App\Cours_users;
 use App\Domaine;
@@ -50,7 +51,26 @@ class UsersController extends Controller
     {
         $user = User::where('id', $id)->get();
         $user->load('domaine', 'role', 'statut', 'semestre');
-        return view('users.view', compact('user'));
+        $quizz = Quizz_users::where('quizz_users.user_id', $id)
+            ->join('quizz', 'quizz.id', '=', 'quizz_users.quizz_id')
+            ->join('chapitres', 'chapitres.id', '=', 'quizz.chapitre_id')
+            ->join('cours', 'cours.id', '=','chapitres.cours_id')
+            ->join('domaines', 'domaines.id', '=','cours.domaine_id')
+            ->take(4)
+            ->get();
+        $inscrit = Cours_users::join('cours', 'cours_users.cours_id' , '=', 'cours.id')
+            ->join('domaines', 'domaines.id','=','cours.domaine_id')
+            ->where('cours_users.user_id', $id)
+            ->orderBy('cours_users.id', 'desc')
+            ->take(4)
+            ->get();
+        $cours = Cours::with('chapitres', 'domaine')
+            ->where('user_id', $id)
+            ->where('online', 1)
+            ->orderBy('id', 'desc')
+            ->take(4)
+            ->get();
+        return view('users.view', compact('user', 'quizz', 'inscrit', 'cours'));
     }
 
     public function cours()
@@ -119,5 +139,59 @@ class UsersController extends Controller
 
         }
 
+    }
+
+    public function preferences(){
+            $cours = Cours::with('domaine', 'chapitres')->where('domaine_id', $this->auth->user()->domaine_id)
+                ->paginate(10);
+            return view('users.preferences', compact('cours'));
+    }
+
+    public function mescours(){
+            $inscrit = Cours_users::join('cours', 'cours_users.cours_id' , '=', 'cours.id')
+                ->join('domaines', 'domaines.id','=','cours.domaine_id')
+                ->where('cours_users.user_id', $this->auth->user()->id)
+                ->where('online',1)
+                ->orderBy('cours_users.id', 'desc')
+                ->paginate(10);
+            return view('users.mescours', compact('inscrit'));
+    }
+
+    public function online(){
+        $user = $this->auth->user();
+        if($user->statut_id == 2){
+            $cours = Cours::where('user_id', $user->id)->online()->paginate(12);
+            return view('users.admin.online', compact('cours'));
+        }else{
+            return back()->with('error', "Vous n'avez pas accès à cette page !");
+        }
+    }
+
+    public function offline(){
+        $user = $this->auth->user();
+        if($user->statut_id == 2){
+            $cours = Cours::where('user_id', $user->id)->where('online', NULL)->paginate(12);
+            return view('users.admin.offline', compact('cours'));
+        }else{
+            return back()->with('error', "Vous n'avez pas accès à cette page !");
+        }
+    }
+
+    public function checkpassword(Requests\passwordRequest $request){
+        $password = $request->all()['actual_password'];
+        $newpassword = $request->all()['new_password'];
+        $nw = bcrypt($newpassword);
+        $user = User::findOrFail($this->auth->user()->id);
+        if(Hash::check($password, $user->password)){
+            User::where('id', $user->id)->update(['password' => $nw]);
+            return back()->with('success', "Votre mot de passe a été modifié avec succès !");
+        }else{
+            return back()->with('error', "Vous n'avez pas entré le bon mot de passe !");
+        }
+    }
+
+    public function modifiermotdepasse(){
+        $user = $this->auth->user();
+        return view('users.checkpassword', compact('user'));
     }
 }

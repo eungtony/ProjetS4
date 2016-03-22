@@ -35,33 +35,62 @@ class HomeController extends Controller
     public function index()
     {
         $user = $this->auth->user();
-        $cours = Cours::where('online', 1)->orderBy('id', 'desc')->take(4)->get();
-        $cours->load('domaine', 'chapitres');
-        $liked = Cours::with('domaine')
-            ->where('online',1)
-            ->where('domaine_id', $this->auth->user()->domaine_id)
-            ->take(5)
-            ->get();
-        $liked->load('domaine');
+        if($user->statut_id == 2){
+            $online = Cours::online()
+                ->orderBy('id', 'desc')
+                ->where('user_id', $user->id)
+                ->take(4)
+                ->get();
+            $online->load('domaine', 'chapitres');
+            $offline = Cours::with('domaine', 'chapitres')
+                ->where('online', NULL)
+                ->where('user_id', $user->id)
+                ->orderBy('id', 'desc')
+                ->take(4)
+                ->get();
 
-        $inscrit = Cours_users::join('cours', 'cours_users.cours_id' , '=', 'cours.id')
-            ->join('domaines', 'domaines.id','=','cours.domaine_id')
-            ->where('cours_users.user_id', $user->id)
-            ->orderBy('cours_users.id', 'desc')
-            ->take(4)
-            ->get();
-        $user_inscrit = Cours_Users::where('user_id', $user->id)->get();
+            $quizz = Quizz_users::where('cours.user_id', $user->id)
+                ->join('quizz', 'quizz.id', '=', 'quizz_users.quizz_id')
+                ->join('chapitres', 'chapitres.id', '=', 'quizz.chapitre_id')
+                ->join('cours', 'cours.id', '=','chapitres.cours_id')
+                ->join('users', 'users.id', '=', 'quizz_users.user_id')
+                ->orderBy('quizz_users.id', 'desc')
+                ->take(5)
+                ->get();
 
-        $quizz = Quizz_users::where('quizz_users.user_id', $user->id)
-            ->join('quizz', 'quizz.id', '=', 'quizz_users.quizz_id')
-            ->join('chapitres', 'chapitres.id', '=', 'quizz.chapitre_id')
-            ->join('cours', 'cours.id', '=','chapitres.cours_id')
-            ->join('domaines', 'domaines.id', '=','cours.domaine_id')
-            ->take(4)
-            ->get();
-        $nb_quizz = Quizz_users::where('user_id', $user->id)->get();
+            return view('admin', compact('user', 'online', 'offline', 'quizz'));
 
-        return view('home', compact('user', 'cours', 'liked', 'recents', 'inscrit', 'nb_quizz', 'quizz', 'user_inscrit'));
+        }elseif($user->statut_id == 1){
+            $cours = Cours::online()->orderBy('id', 'desc')->take(4)->get();
+            $cours->load('domaine', 'chapitres');
+            $liked = Cours::with('domaine')
+                ->online()
+                ->where('domaine_id', $this->auth->user()->domaine_id)
+                ->take(4)
+                ->get();
+            $liked->load('domaine');
+
+            $inscrit = Cours_users::join('cours', 'cours_users.cours_id' , '=', 'cours.id')
+                ->join('domaines', 'domaines.id','=','cours.domaine_id')
+                ->where('cours_users.user_id', $user->id)
+                ->where('online',1)
+                ->orderBy('cours_users.id', 'desc')
+                ->take(4)
+                ->get();
+            $user_inscrit = Cours_Users::where('user_id', $user->id)->get();
+
+            $quizz = Quizz_users::where('quizz_users.user_id', $user->id)
+                ->join('quizz', 'quizz.id', '=', 'quizz_users.quizz_id')
+                ->join('chapitres', 'chapitres.id', '=', 'quizz.chapitre_id')
+                ->join('cours', 'cours.id', '=','chapitres.cours_id')
+                ->join('domaines', 'domaines.id', '=','cours.domaine_id')
+                ->orderBy('quizz_users.id', 'desc')
+                ->take(5)
+                ->get();
+            $nb_quizz = Quizz_users::where('user_id', $user->id)->get();
+
+            return view('home', compact('user', 'cours', 'liked', 'recents', 'inscrit', 'nb_quizz', 'quizz', 'user_inscrit'));
+        }
     }
 
     public function admin(){
@@ -78,8 +107,7 @@ class HomeController extends Controller
         foreach($recherche as $r){
             $data->where('titre', 'LIKE', '%'.$r.'%');
         }
-
-        $resultat = $data->get();
+        $resultat = $data->paginate(10);
         return view('recherche', compact('resultat', 'rs'));
 
     }

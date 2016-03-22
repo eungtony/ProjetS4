@@ -60,7 +60,7 @@ class adminQuizzController extends Controller
         return back()->with('success', 'Votre question a bien été modifié !');
     }
 
-    public function addQuestions(Request $request){
+    public function addQuestions(Requests\questionRequest $request){
         $id_chap = $request->request->all()['chapitre_id'];
         $create = DB::table('quizz_questions')->insert($request->request->all());
         return redirect(route('admin.chapitre.edit', $id_chap))->with('success', 'Votre question a bien été ajouté !');
