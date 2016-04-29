@@ -24,8 +24,6 @@ class validercompteRequest extends Request
     public function rules()
     {
         return [
-            'nom' => 'required',
-            'prenom' => 'required',
             'numero' => 'required',
             'email' => 'required'
         ];
