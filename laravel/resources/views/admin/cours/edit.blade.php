@@ -5,7 +5,11 @@
 @section('title') Editer le cours {{$cours->titre}} @endsection
 
 <div class="wi80">
-    <h2 class="text-right">Modifier le cours: {!! $cours->titre !!}</h2>
+
+    <h2 class="text-right">
+        Modifier le cours: {!! $cours->titre !!}<br>
+        <a href="{{route('voir.cours', [$cours->domaine->slug, $cours->cours_slug])}}">Voir le cours</a>
+    </h2>
 
     @include('admin.cours.form', ['action' => 'update'])
 

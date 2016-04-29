@@ -2,81 +2,97 @@
 
 @section('content')
 
-    {{-- EDITER LA QUESTION --}}
+    <div class="wi80">
 
-    <div class="col-md-6">
+        {{-- EDITER LA QUESTION --}}
 
-        <a href="{{route('admin.chapitre.edit', $quizz->chapitre_id)}}">Revenir vers l'édition du chapitre</a>
+        <div class="col-md-6">
 
-        <h4>Editer la question</h4>
+            <a href="{{route('admin.chapitre.edit', $quizz->chapitre_id)}}">Revenir vers l'édition du chapitre</a>
 
-        @include('quizz.form', ['action' => 'update'])
+            <h4>Editer la question</h4>
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Editer cette question</button>
-        </div>
+            @include('quizz.form', ['action' => 'update'])
 
-        {!! Form::close() !!}
-    </div>
+            @if($quizz->reponse_id == 0)
 
-    {{-- AJOUTER UNE REPONSE A LA QUESTION --}}
+                <p class="alert alert-warning">
+                    Attention vous n'avez pas mis à jour la réponse exacte de cette question !
+                </p>
 
-    <div class="col-md-6">
-        <h4>Ajouter une réponse à cette question</h4>
-
-        {!! Form::model($quizz_reponse, [
-    'class' => 'form-horizontal',
-    'url' => route('creer.reponse', $quizz->id),
-    'method' => 'post']) !!}
-
-        {{Form::hidden('quizz_questions_id', $quizz->id, ['class'=>'form-control'])}}
-        {{Form::hidden('quizz_id', $quizz->quizz_id, ['class'=>'form-control'])}}
-
-        <div class="form-group">
-            <label for="">Intitulé de la réponse</label>
-            {!! Form::text('reponse', $quizz_reponse->reponse, ['class' => 'form-control']) !!}
-        </div>
-
-        <div class="form-group">
-            <label for="">Ordre de la réponse
-                {!! Form::number('ordre', $quizz_reponse->ordre, ['class' => 'form-control']) !!}
-            </label>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Ajouter cette réponse</button>
-        </div>
-
-        {!! Form::close() !!}
-    </div>
-
-    <hr>
-    {{-- LISTES DES REPONSES --}}
-
-    <div class="col-md-12">
-
-        <h4>Liste des réponses</h4>
-
-        @foreach($reponses as $r)
-
-            {!! Form::model($r, ['class'=>'form-horizontal', 'url' => action('adminQuizzReponsesController@update', $r->quizz_questions_id), 'method' => 'put'])!!}
-
-            {!! Form::hidden('id',$r->id ) !!}
+            @endif
 
             <div class="form-group">
-                {!! Form::text('reponse', $r->reponse, ['class'=>'form-control']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::number('ordre', $r->ordre, ['class'=>'form-control']) !!}
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Editer cette réponse</button>
+                <button type="submit" class="btn btn-primary">Editer cette question</button>
             </div>
 
             {!! Form::close() !!}
+        </div>
 
-        @endforeach
+        {{-- AJOUTER UNE REPONSE A LA QUESTION --}}
+
+        <div class="col-md-6">
+            <h4>Ajouter une réponse à cette question</h4>
+
+            {!! Form::model($quizz_reponse, [
+        'class' => 'form-horizontal',
+        'url' => route('creer.reponse', $quizz->id),
+        'method' => 'post']) !!}
+
+            {{Form::hidden('quizz_questions_id', $quizz->id, ['class'=>'form-control'])}}
+            {{Form::hidden('quizz_id', $quizz->quizz_id, ['class'=>'form-control'])}}
+
+            <div class="form-group">
+                <label for="">Intitulé de la réponse</label>
+                {!! Form::text('reponse', $quizz_reponse->reponse, ['class' => 'form-control']) !!}
+            </div>
+
+            <div class="form-group">
+                <label for="">Ordre de la réponse
+                    {!! Form::number('ordre', $quizz_reponse->ordre, ['class' => 'form-control']) !!}
+                </label>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Ajouter cette réponse</button>
+            </div>
+
+            {!! Form::close() !!}
+        </div>
+
+        <hr>
+        {{-- LISTES DES REPONSES --}}
+
+        <div class="col-md-12">
+
+            <h4>Liste des réponses</h4>
+
+            @foreach($reponses as $r)
+
+                {!! Form::model($r, ['class'=>'form-horizontal', 'url' => action('adminQuizzReponsesController@update', $r->quizz_questions_id), 'method' => 'put'])!!}
+
+                {!! Form::hidden('id',$r->id ) !!}
+
+                <div class="form-group">
+                    {!! Form::text('reponse', $r->reponse, ['class'=>'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::number('ordre', $r->ordre, ['class'=>'form-control']) !!}
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Editer cette réponse</button>
+                </div>
+
+                {!! Form::close() !!}
+
+                <span>
+                <a href="{{route('admin.quizz.reponses.destroy',$r->id)}}" data-method="delete" data-confirm="Voulez-vous réellement supprimer cette réponse ?"><i class="fa fa-trash"></i></a>
+            </span>
+
+            @endforeach
+
+        </div>
 
     </div>
 

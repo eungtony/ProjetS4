@@ -17,12 +17,12 @@
     <div class="form-group">
         <label for="">
            Sujet résolu ?
-            {!! Form::checkbox('resolu',1,$sujet->resolu,['class'=>'form-control']) !!}
+            {!! Form::checkbox('resolu', 1, $sujet->resolu, ['class'=>'form-control']) !!}
         </label>
     </div>
     @endif
 
 <div class="form-group">
     <label for="">Contenu du cours</label>
-    {!! Form::textarea('contenu', $action == 'store' ? '' : $sujet->contenu, ['class'=>'form-control']) !!}
+    {!! Form::textarea('contenu', $action == 'store' ? '' : $sujet->contenu, ['class'=>'form-control', 'id' => 'summernote']) !!}
 </div>

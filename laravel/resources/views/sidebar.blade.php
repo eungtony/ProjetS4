@@ -4,9 +4,9 @@ use App\Domaine;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
-$domaines = Domaine::with(['cours' => function($query){
-        $query->online();
-        }])
+$domaines = Domaine::with(['cours' => function ($query) {
+    $query->online();
+}])
         ->get();
 $prof = User::where('statut_id', 2)->get();
 
@@ -27,15 +27,16 @@ $prof = User::where('statut_id', 2)->get();
     <ul>
         @foreach($prof as $p)
             <li><a href="{{route('voir.profil', $p->id)}}">{{$p->nom}} {{$p->prenom}}</a></li>
-            @endforeach
+        @endforeach
     </ul>
     @if(Auth::user() && Auth::user()->statut_id == 2)
-    <h1>Administration</h1>
-    <ul>
-        <li><a href="{{route('admin.dashboard')}}">Gérer mes cours</a></li>
-    </ul>
+        <h1>Administration</h1>
+        <ul>
+            <li><a href="{{route('admin.dashboard')}}">Gérer mes cours</a></li>
+        </ul>
     @endif
-    <h1>NewsLetter</h1>
-    <input type="text" placeholder="exemple@xyz.fr">
-    <button>OK</button>
+    <h1>Nos forums</h1>
+    <ul>
+        <li><a href="{{route('voir.forum')}}">Accéder à nos forums</a></li>
+    </ul>
 </div>

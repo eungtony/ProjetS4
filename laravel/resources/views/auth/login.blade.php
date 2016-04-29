@@ -1,67 +1,44 @@
-@extends('layouts.app')
+@extends('layouts.login')
 
 @section('title') Connectez-vous  @endsection
 
 @section('content')
 
-<div class="container">
-    <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                        {!! csrf_field() !!}
+    <form class="form" role="form" method="POST" action="{{ url('/login') }}">
+        {!! csrf_field() !!}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
+        <label class="field">E-mail URCA</label>
 
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+        <input type="email" class="wi240px" name="email" value="{{ old('email') }}">
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
+        @if ($errors->has('email'))
+            <span class="help-block wi240px field">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                @endif
-                            </div>
-                        </div>
+        @endif
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
+        <label class="field">Mot de passe</label>
 
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
+        <input type="password" class="wi240px" name="password">
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
+        @if ($errors->has('password'))
+            <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
-                                @endif
-                            </div>
-                        </div>
+        @endif
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember"> Se souvenir
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+        <div class="checkbox">
+            <label class="field">
+                <input type="checkbox" name="remember"> Se souvenir
+            </label>
+        </div>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i>Connectez-vous
-                                </button>
+        <button type="submit" class="btn btn-primary" style="margin-bottom:20px;">
+            <i class="fa fa-btn fa-sign-in"></i>Connectez-vous
+        </button>
 
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Mot de passe oublié ?</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-    </div>
-</div>
+        <a href="{{url('validermoncompte')}}">Première connexion ?</a><br>
+        <a href="{{url('/password/reset')}}">Mot de passe oublié ?</a>
+
+    </form>
 @endsection

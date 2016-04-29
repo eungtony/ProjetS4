@@ -21,11 +21,6 @@
     </label>
 </div>
 
-<div class="form-group">
-    <label for="">Type de la question</label>
-    {!! Form::select('type', ['0'=>'QCM', '1'=>'QCU'],$quizz->type, ['class' => 'form-control']) !!}
-</div>
-
 @if($action == 'addQuestions')
 
     {{Form::hidden('reponse_id', null)}}

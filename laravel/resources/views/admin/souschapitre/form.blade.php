@@ -8,6 +8,7 @@
 {!! Form::hidden('slug', null, ['class'=>'form-control']) !!}
 {!! Form::hidden('user_id', $user_id->id, ['class'=>'form-control']) !!}
 
+<div class="group">
     <div class="form-group">
         <label for="">Numéro du sous-chapitre</label>
         {!! Form::number('numero', $schapitre->numero, ['class' => 'form-control']) !!}
@@ -18,7 +19,8 @@
         {!! Form::text('titre', null, ['class'=>'form-control']) !!}
     </div>
 
-<div class="form-group">
-    <label for="">Contenu du sous-chapitre</label>
-    {!! Form::textarea('contenu', null, ['class'=>'form-control']) !!}
+    <div class="form-group">
+        <label for="">Contenu du sous-chapitre</label>
+        {!! Form::textarea('contenu', null, ['class'=>'form-control', 'id' => 'summernote']) !!}
+    </div>
 </div>

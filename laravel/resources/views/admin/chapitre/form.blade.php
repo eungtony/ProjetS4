@@ -6,6 +6,7 @@
 {!! Form::hidden('cours_slug', null, ['class'=>'form-control']) !!}
 {!! Form::hidden('cours_id', $cours->id, ['class'=>'form-control']) !!}
 {!! Form::hidden('user_id', $user->id, ['class'=>'form-control']) !!}
+{!! Form::hidden('cours_users_id', $cours->id, ['class'=>'form-control']) !!}
 
 <div class="group">
     <div class="form-group">

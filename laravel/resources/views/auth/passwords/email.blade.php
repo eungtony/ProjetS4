@@ -1,47 +1,35 @@
-@extends('layouts.app')
+@extends('layouts.login')
 
-<!-- Main Content -->
+        <!-- Main Content -->
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Restaurer le mot de passe</div>
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
-                        {!! csrf_field() !!}
+    <form class="form" role="form" method="POST" action="{{ url('/password/email') }}" style="height:300px;">
+        {!! csrf_field() !!}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Adresse mail</label>
+        <p>
+            Pour réinitialiser votre mot de passe, rentrez votre adresse mail URCA.
+        </p>
 
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
+        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+            <label class="field">Adresse mail</label>
+
+            <input type="email" class="wi240px" name="email" value="{{ old('email') }}">
+
+            @if ($errors->has('email'))
+                <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-envelope"></i>Envoyez le mot de passe sur le mail
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            @endif
         </div>
-    </div>
-</div>
+
+        <button type="submit">
+            <i class="fa fa-btn fa-envelope"></i>Envoyez le mot de passe sur le mail
+        </button>
+    </form>
 @endsection

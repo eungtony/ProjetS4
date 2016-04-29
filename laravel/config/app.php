@@ -92,7 +92,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'vGush5vK9cqxLQYwrR9V8Y6Wc3H4fTQM'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -156,8 +156,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class
+        Collective\Html\HtmlServiceProvider::class
 
     ],
 

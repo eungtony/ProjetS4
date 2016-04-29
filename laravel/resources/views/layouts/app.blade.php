@@ -1,118 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{!! csrf_token() !!}">
     <title>MMIRévision - @yield('title')</title>
-
-    <!-- Fonts -->
+    <meta name="csrf-token" content="{!! csrf_token() !!}">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{url('/css/style.css')}}">
+    <link rel="stylesheet" href="{{url('/css/grillade.css')}}">
+    <link rel="stylesheet" href="{{url('/css/bootstrap.css')}}">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet'
           type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{url('/css/font-awesome.css')}}">
+    <link rel="stylesheet" href="{{url('/css/animate.css')}}">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{url('/css/bootstrap.css')}}">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-
-    <style>
-        body {
-            font-family: 'Lato';
-        }
-
-        .fa-btn {
-            margin-right: 6px;
-        }
-    </style>
 </head>
-<body id="app-layout">
-<nav class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-
-            <!-- Collapsed Hamburger -->
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#app-navbar-collapse">
-                <span class="sr-only">Toggle Navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-            <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
-                MMIRevision
-            </a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="app-navbar-collapse">
-            <!-- Left Side Of Navbar -->
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url('/home') }}">Home</a></li>
-                @if(Auth::user())
-                    <li><a href="{{route('nos.cours')}}">Nos cours</a></li>
-                    <li><a href="{{route('voir.forum')}}">Forums</a></li>
-                @endif
-
-                @if(Auth::guest())
-                @elseif(Auth::user() && Auth::user()->statut->id == 2)
-                    <li><a href="{{ route('admin.dashboard') }}">Gérer mes cours</a></li>
-                @endif
-            </ul>
-
-            <!-- Right Side Of Navbar -->
-            <ul class="nav navbar-nav navbar-right">
-                <!-- Authentication Links -->
-                @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Connexion</a></li>
-                    <li><a href="{{ url('/register') }}">Inscription</a></li>
-                    <li><a href="{{ url('/validermoncompte') }}">Validez mon compte</a></li>
-                @else
-
-                    <img src="img/avatars/{{Auth::user()->avatar}}" alt="" style="width:30px; border-radius:30px; margin-top:15px;">
-                    <li><a href="{{ route('profil') }}">Profil</a></li>
-                    <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Déconnexion</a></li>
-                @endif
-            </ul>
-        </div>
+<body>
+<header class="grid-2-1 header wow fadeInDown">
+    <div>
+        <a href="{{url('/home')}}"><img src="/~tony/images/logo.png" alt="logo" class="logo"></a>
     </div>
-</nav>
-<div class="container">
+    <div class="grid-3">
+        @if(Auth::user())
+            <div class="first" style="margin-right:50px;">
+                {!! Form::open(['method'=>'post', 'url'=> route('recherche')]) !!}
+                <input type="text" name="research" placeholder="Recherche ..."/>
+                {{Form::close()}}
+            </div>
+            <div><img src="/~tony/img/avatars/{{Auth::user()->avatar}}" alt="Photo de %étudiant%" id="avatar" class="ico floatL">
+                <p style="margin-left:5px;" class="user"><a href="{{url('/profil')}}"
+                                               style="color:white;">{{Auth::user()->prenom}}</a>
+                    <a href="{{url('/logout')}}"><i class="fa fa-power-off" style="color:white; margin-left:10px;"></i></a>
+                </p></div>
+        @else
+            <p class="first">
+                <i class="fa fa-sign-in" style="color:white;"></i> <a href="{{url('login')}}" style="color:white;">Connexion</a>
+            </p>
+        @endif
+    </div>
 
-    @include('flash')
-    @yield('content')
+</header>
+<section class="grid-12" style="background-color:#f3f3f3;">
 
-</div>
+    @include('sidebar')
 
-<!-- JavaScripts -->
-<script src="{{ url('/js/jquery.js')}}"></script>
-<script src="{{ url('/js/bootstrap.js')}}"></script>
-<script src="{{ url('/js/laravel.js') }}"></script>
-<script src="{{ url('/js/tinymce/tinymce.min.js') }}"></script>
-<script src="{{ url('/js/tinymce/jquery.tinymce.min.js') }}"></script>
+    <div class="article flex-item-plus" style="padding-top:100px;">
+
+        @include('flash')
+        @yield('content')
+
+    </div>
+</section>
+</body>
+<script src="{{url('/js/jquery.js')}}"></script>
+<script src="{{url('/js/bootstrap.js')}}"></script>
+<script src="{{url('/js/summernote.min.js')}}"></script>
+<script src="{{url('/js/laravel.js')}}"></script>
+<script src="{{url('/js/wow.min.js')}}"></script>
 <script>
-    tinymce.init({
-        selector: 'textarea',
-        height: 300,
-        theme: 'modern',
-        plugins: [
-            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen',
-            'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor colorpicker textpattern imagetools',
-            'table contextmenu directionality emoticons paste textcolor filemanager'
-        ],
-        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        image_advtab: true,
-        content_css: [
-            '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
-            '//www.tinymce.com/css/codepen.min.css'
-        ]
+    $(document).ready(function () {
+        $('#summernote').summernote();
+    });
+    new WOW().init();
+    $('.datepicker').datepicker();
+</script>
+<script>
+    $(function () {
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 1) {
+                $('.header').addClass('sticky');
+                $('.user').addClass('sticky');
+                $('#avatar').addClass('sticky');
+                $('.logo').addClass('sticky');
+            }
+            else {
+                $('.header').removeClass('sticky');
+                $('.user').removeClass('sticky');
+                $('#avatar').removeClass('sticky');
+                $('.logo').removeClass('sticky');
+            }
+        });
     });
 </script>
-
-{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-</body>
 </html>

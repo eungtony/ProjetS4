@@ -32,10 +32,12 @@
                         <th>Titre du chapitre</th>
                         <th>Titre du cours</th>
                         <th>Module du cours</th>
+                        <th>Voir mes réponses</th>
                         <th>Résultat du Quiz</th>
                     </tr>
                 </tread>
                 <tbody>
+
                 @foreach($quizz as $q)
 
                     <tr>
@@ -44,6 +46,7 @@
                         </td>
                         <td><a href="{{route('voir.cours', [$q->slug, $q->cours_slug])}}">{{$q->titre}}</a></td>
                         <td><a href="{{route('voir.cours.domaine', $q->slug)}}">{{$q->nom}}</a></td>
+                        <td><a href="{{route('profil.quizz.correction', [$user->id, $q->quizz_id])}}">Mes réponses</a></td>
                         <td>{{$q->note_user}}/{{$q->note_max}}</td>
                     </tr>
 

@@ -73,31 +73,50 @@
 
     </div>
 
-    <div class="wi80 wow fadeInUp">
-        <h1>Note des QUIZ de mes cours</h1>
-        <hr>
-        <table class="table table-striped">
-            <tread>
-                <tr>
-                    <th>Titre du chapitre</th>
-                    <th>Titre du cours</th>
-                    <th>Nom de l'étudiant</th>
-                    <th>Résultat du Quiz</th>
-                </tr>
-            </tread>
-            <tbody>
-            @foreach($quizz as $q)
+    @if($quizz->isEmpty())
 
-                <tr>
-                    <td>{{$q->chapitre_titre}}</td>
-                    <td>{{$q->titre}}</td>
-                    <td>{{$q->nom}}</td>
-                    <td>{{$q->note_user}}/{{$q->note_max}}</td>
-                </tr>
+        <div class="wi80 wow fadeInUp">
 
-            @endforeach
-            </tbody>
-        </table>
-    </div>
+            <p class="alert alert-warning">Aucun élève n'a répondu à vos quizz !</p>
+
+        </div>
+
+    @else
+
+        <div class="wi80 wow fadeInUp">
+
+            <h1>Note des QUIZ de mes cours</h1>
+            <hr>
+            <h4>
+                Le pourcentage de réussite à vos quizz est de: {{round($pourcentage)}} %
+            </h4>
+            <hr>
+            <table class="table table-striped">
+                <tread>
+                    <tr>
+                        <th>Titre du chapitre</th>
+                        <th>Titre du cours</th>
+                        <th>Nom de l'étudiant</th>
+                        <th>Résultat du Quiz</th>
+                    </tr>
+                </tread>
+                <tbody>
+
+                @foreach($quizz as $q)
+
+                    <tr>
+                        <td>{{$q->chapitre_titre}}</td>
+                        <td>{{$q->titre}}</td>
+                        <td>{{$q->nom}}</td>
+                        <td>{{$q->note_user}}/{{$q->note_max}}</td>
+                    </tr>
+
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+
+
+    @endif
 
 @endsection

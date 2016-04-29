@@ -2,9 +2,11 @@
 
 @section('content')
 
-    <h3>
-        Résultat du QUIZZ sur: {{$titre}}!
-    </h3>
+    <div class="wi80 group">
+
+        <h3>
+            Résultat du QUIZZ sur: {{$titre}}!
+        </h3>
 
         @foreach($user_reponses as $u)
 
@@ -29,18 +31,20 @@
         @endforeach
 
 
-    @if($note_user > $notemax/2)
+        @if($note_user > $notemax/2)
 
-        <h3 class="alert alert-success">
-            Tu as obtenu {{$note_user}}/{{$notemax}} !
-        </h3>
+            <h3 class="alert alert-success">
+                Tu as obtenu {{$note_user}}/{{$notemax}} !
+            </h3>
 
-    @elseif($note_user < $notemax/2)
+        @elseif($note_user < $notemax/2)
 
-        <h3 class="alert alert-danger">
-            Tu as obtenu {{$note_user}}/{{$notemax}} !
-        </h3>
+            <h3 class="alert alert-danger">
+                Tu as obtenu {{$note_user}}/{{$notemax}} !
+            </h3>
 
-    @endif
+        @endif
+
+    </div>
 
 @endsection

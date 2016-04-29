@@ -10,7 +10,8 @@
 
             <div class="grid-1-3">
                 <div>
-                    <p class="text-center"><img src="/~tony/img/avatars/{{$u->avatar}}" alt=""></p>
+                    <p class="text-center"><img src="/~tony/img/avatars/{{$u->avatar}}" alt="" style="height:200px;">
+                    </p>
                 </div>
 
                 <div>
@@ -18,10 +19,10 @@
                     <p>{{$u->email}}</p>
                     <p>{{$u->statut->statut}}</p>
                     <p>{{$u->role->nom}}</p>
-                    @if($u->statut->id == 1)
-                        <p>{{$u->semestre->nom}}</p>
+                    @if($u->statut_id == 2)
+                        <h1>{{$u->domaine->nom}}</h1>
                     @endif
-                    <h1>{{$u->domaine->nom}}</h1>
+                    <p>Pourcentage de réussite aux Quizz: {{round($pourcentage)}}%</p>
                 </div>
             </div>
 

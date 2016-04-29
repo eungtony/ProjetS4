@@ -6,6 +6,8 @@
 
 <div class="wi80">
 
+    <a href="{{route('admin.dashboard')}}">Revenir à l'Administration</a>
+
     <h3>Rédiger un cours</h3>
 
     @include('admin.cours.form', ['action' => 'store'])

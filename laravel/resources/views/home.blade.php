@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title') Accueil @endsection
+
+@section('content')
     <h1>Tableau de bord</h1>
 
     <!-- Partie Cours -->
@@ -110,6 +112,8 @@
             </p>
 
         @else
+
+            <h1>Votre pourcentage de réussite aux Quizz: {{round($pourcentage)}} %</h1>
 
             <div class="group grid_4 wow fadeInUp">
 

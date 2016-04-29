@@ -1,5 +1,5 @@
 @if (count($errors) > 0)
-    <div class="alert alert-danger">
+    <div class="alert alert-danger wow flash">
             @foreach ($errors->all() as $error)
                 <p>{{ $error }}</p>
             @endforeach
@@ -8,7 +8,7 @@
 
 @if(session()->has('success'))
 
-    <div class="alert alert-success" style="width: 80%; margin:auto;">
+    <div class="alert alert-success wow flash" style="width: 80%; margin:auto;">
         {{ session('success') }}
     </div>
 
@@ -16,7 +16,7 @@
 
 @if(session()->has('error'))
 
-    <div class="alert alert-danger" style="width: 80%; margin:auto;">
+    <div class="alert alert-danger wow flash" style="width: 80%; margin:auto;">
         {{ session('error') }}
     </div>
 

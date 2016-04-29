@@ -34,7 +34,7 @@
 
                 <tr>
 
-                    <td><a href="{{route('voir.sujet', [$domaine->slug,$cours->cours_slug,$sujet->slug])}}">{{$sujet->titre}}</a></td>
+                    <td><a href="{{route('voir.sujet', [$domaine->slug,$cours->cours_slug,$sujet->slug])}}">@if($sujet->resolu == 1)[RESOLU]@endif {{$sujet->titre}}</a></td>
                     <td>Par <a href="{{route('voir.profil', $sujet->user->id)}}">{{$sujet->user->prenom}}</a></td>
 
                 </tr>

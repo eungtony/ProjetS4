@@ -4,10 +4,15 @@
 
 @section('content')
 
-@include('forums.sujet.form', ['action' => 'store'])
+    <div class="wi80">
+        <div class="group">
+            @include('forums.sujet.form', ['action' => 'store'])
 
-<div class="form-group text-right">
-    <button class="btn btn-primary" type="submit">Créer le sujet</button>
-</div>
+            <div class="form-group text-right">
+                <button class="btn btn-primary" type="submit">Créer le sujet</button>
+            </div>
+
+        </div>
+    </div>
 
 @endsection
