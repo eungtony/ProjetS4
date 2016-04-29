@@ -40,17 +40,16 @@ class UsersController extends Controller
     {
         $user = $this->auth->user();
         $this->validate($request, [
-            'email' => 'required',
             'avatar' => 'image'
         ]);
-        $user->update($request->only('email', 'prenom', 'nom', 'avatar', 'domaine_id'));
+        $user->update($request->only('avatar', 'domaine_id'));
         return redirect()->back()->with('success', 'Votre profil a bien été modifié !');
     }
 
     public function view($id)
     {
         $user = User::where('id', $id)->get();
-        $user->load('domaine', 'role', 'statut', 'semestre');
+        $user->load('domaine', 'role', 'statut');
         $quizz = Quizz_users::where('quizz_users.user_id', $id)
             ->join('quizz', 'quizz.id', '=', 'quizz_users.quizz_id')
             ->join('chapitres', 'chapitres.id', '=', 'quizz.chapitre_id')
@@ -70,7 +69,14 @@ class UsersController extends Controller
             ->orderBy('id', 'desc')
             ->take(4)
             ->get();
-        return view('users.view', compact('user', 'quizz', 'inscrit', 'cours'));
+        $pc = DB::table('quizz_users')->where('user_id', $id)->get();
+        $collection = collect($pc);
+        if($collection->sum('note_max') == 0){
+            $pourcentage = 0;
+        }else{
+            $pourcentage = 100*$collection->sum('note_user')/$collection->sum('note_max');
+        }
+        return view('users.view', compact('user', 'quizz', 'inscrit', 'cours', 'pourcentage'));
     }
 
     public function cours()

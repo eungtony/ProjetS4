@@ -8,7 +8,7 @@ use App\Exercices;
 use App\Quizz_users;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;

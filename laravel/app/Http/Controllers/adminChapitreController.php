@@ -49,10 +49,14 @@ class adminChapitreController extends Controller
      */
 
     public function create($id){
-        $chapitre = new Chapitre;
+        $chapitre = new Chapitre();
         $user = $this->auth->user();
         $cours = Cours::where('id', $id)->get()[0];
-        return view('admin.chapitre.create', compact('chapitre','user','cours'));
+        if($cours->user_id == $this->auth->user()->id){
+            return view('admin.chapitre.create', compact('chapitre','user','cours'));
+        }else{
+            return back()->with('error', "Vous n'avez pas accès à cette page !");
+        }
     }
 
     /**

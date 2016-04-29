@@ -29,11 +29,18 @@ class answerController extends Controller
         return redirect(route('voir.sujet', [$domaine_slug, $cours_slug, $sujet_slug]))->with('success', 'votre post a bien été publié !');
     }
 
-    public function edit(){
-        return view('forums.reponses.edit');
+    public function edit($id){
+        $answer = Answer::where('id', $id)->get();
+        dd($answer);
+        return view('forums.reponses.edit', compact('answer'));
     }
 
-    public function update(){
+    public function update($id){
 
+    }
+
+    public function destroy($id){
+        Answer::where('id', $id)->delete();
+        return back()->with('error', 'Le post a été supprimé avec succès !');
     }
 }

@@ -63,6 +63,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('quizz/{idquizz}/correction', ['uses'=>'quizzController@correction', 'as'=>'correction']);
     //Route::get('cours/{slugdomaine}/{slugcours}/{slugchapitre}/{slugschapitre}', ['uses' => 'sousChapitreController@show', 'as' => 'voir.schapitre']);
 
+    Route::resource('admin/modules', 'adminModuleController');
     Route::resource('/admin/quizz', 'adminQuizzController');
     Route::get('admin/quizz/{id}/question', 'adminQuizzController@question');
     Route::resource('/admin/quizz/reponses', 'adminQuizzReponsesController');
@@ -93,7 +94,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('forums/{slugdomaine}/{slugcours}/sujet/create', ['uses' => 'sujetController@create', 'as' => 'creer.sujet']);
     Route::post('forums/{slugdomaine}/{slugcours}/sujet/create', ['uses' => 'sujetController@store']);
 
-    Route::resource('forums/sujets/{slugsujet}/answer', 'answerController');
+    Route::resource('forums/sujets/answer', 'answerController');
 
     Route::resource('admin/exercices', 'adminExerciceController');
     Route::get('admin/{idchapitre}/exercices/create', ['uses'=>'adminExerciceController@create', 'as'=>'creer.exercice']);

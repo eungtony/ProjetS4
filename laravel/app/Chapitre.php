@@ -23,4 +23,8 @@ class Chapitre extends Model
     public function quizz_users(){
         return $this->hasOne('App\Quizz_users');
     }
+
+    public function cours_users(){
+        return $this->belongsTo('App\Cours_users', 'cours_users');
+    }
 }

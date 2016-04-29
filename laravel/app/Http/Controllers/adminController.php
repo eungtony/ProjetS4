@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Input;
+use App\User;
 use App\Chapitre;
 use App\Cours;
 use App\Difficulte;
@@ -69,6 +71,15 @@ class adminController extends Controller
         $domaines = Domaine::lists('nom', 'id');
         $chapitres = Chapitre::where('cours_id', $cours->id)->get();
         $cours->update($request->only('titre', 'objectif','domaine_id', 'cours_slug', 'url_video', 'online', 'difficulte_id', 'heures', 'image'));
+        if(Input::hasFile('pdf') == true && Input::file('pdf')->getClientOriginalExtension() == 'pdf'){
+            $file = Input::file('pdf');
+            $destination = '/home/tony/public_html/pdf/';
+            $name = "{$cours->cours_slug}.pdf";
+            Cours::where('id', $cours->id)->update(['pdf' => 1]);
+            $file->move($destination, $name);
+        }elseif(Input::hasFile('pdf') == true){
+            return back()->with('error', "Vous n'avez pas upload de fichier au format PDF !");
+        }
         return redirect(action('adminController@edit', compact('cours', 'domaines', 'user', 'chapitres')))->with('success', 'Le cours a bien été modifié !');
     }
 
@@ -79,4 +90,5 @@ class adminController extends Controller
         $cours->delete();
         return back()->with('success', 'Le cours a bien été supprimé !');
     }
+
 }

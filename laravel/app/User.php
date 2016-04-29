@@ -49,10 +49,6 @@ class User extends Authenticatable
         return $this->belongsTo('App\Statut');
     }
 
-    public function semestre() {
-        return $this->belongsTo('App\Semestre');
-    }
-
     public function domaine() {
         return $this->belongsTo('App\Domaine');
     }

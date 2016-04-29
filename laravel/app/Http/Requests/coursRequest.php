@@ -26,7 +26,9 @@ class coursRequest extends Request
         return [
             "titre" => "required",
             "objectif" => "required",
-            "domaine_id" => "required"
+            "domaine_id" => "required",
+            'difficulte_id' => 'required',
+            'heures' => 'required'
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class reponseRequest extends Request
+class validercompteRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,10 @@ class reponseRequest extends Request
     public function rules()
     {
         return [
-            'reponse' => "required",
-            'ordre' => "required"
+            'nom' => 'required',
+            'prenom' => 'required',
+            'numero' => 'required',
+            'email' => 'required'
         ];
     }
 }

@@ -18,7 +18,7 @@ class adminSousChapitreController extends Controller
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
-        $this->middleware('owner', ['except' => ['create', 'store']]);
+        $this->middleware('owner', ['except' => ['store', 'create']]);
         $this->middleware('Admin', ['except' =>['edit', 'store', 'update', 'destroy']]);
     }
 
@@ -33,8 +33,7 @@ class adminSousChapitreController extends Controller
         $titre = $chapitre['0']->chapitre_titre;
         $schapitre = new Souschapitre;
         $user_id = $this->auth->user();
-        return view('admin.souschapitre.create', compact('chapitre_id','cours_id','schapitre', 'titre', 'user_id'));
-
+            return view('admin.souschapitre.create', compact('chapitre_id','cours_id','schapitre', 'titre', 'user_id'));
     }
 
     public function store(Requests\sousChapitreRequest $request){

@@ -30,7 +30,6 @@ class Owner
         $reflection_method = new \ReflectionMethod($controller_name, 'getResource');
         $resource = $reflection_method->invokeArgs($controller, $request->route()->parameters());
 
-
         if ($resource->user_id != $this->auth->user()->id) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);

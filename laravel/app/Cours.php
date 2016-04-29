@@ -6,6 +6,7 @@ use App\Behaviour\coursSlug;
 use App\Behaviour\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Intervention\Image\ImageManagerStatic;
+use Input;
 
 class Cours extends Model
 {
@@ -76,5 +77,13 @@ class Cours extends Model
             $this->attributes['image'] = true;
         }
     }
+
+    public function getPdfAttribute($pdf){
+        if($pdf){
+            return "/~tony/pdf/{$this->cours_slug}.pdf";
+        }else{
+            return false;
+        }
+}
 
 }

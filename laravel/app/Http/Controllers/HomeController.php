@@ -58,7 +58,13 @@ class HomeController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('admin', compact('user', 'online', 'offline', 'quizz'));
+            if($quizz->sum('note_max') == 0){
+                $pourcentage = 0;
+            }else{
+                $pourcentage = 100*$quizz->sum('note_user')/$quizz->sum('note_max');
+            }
+
+            return view('admin', compact('user', 'online', 'offline', 'quizz', 'pourcentage'));
 
         }elseif($user->statut_id == 1){
             $cours = Cours::online()->orderBy('id', 'desc')->take(4)->get();
@@ -89,7 +95,15 @@ class HomeController extends Controller
                 ->get();
             $nb_quizz = Quizz_users::where('user_id', $user->id)->get();
 
-            return view('home', compact('user', 'cours', 'liked', 'recents', 'inscrit', 'nb_quizz', 'quizz', 'user_inscrit'));
+            $pc = DB::table('quizz_users')->where('user_id', $user->id)->get();
+            $collection = collect($pc);
+            if($collection->sum('note_max') == 0){
+                $pourcentage = 0;
+            }else{
+                $pourcentage = 100*$collection->sum('note_user')/$collection->sum('note_max');
+            }
+
+            return view('home', compact('pourcentage', 'user', 'cours', 'liked', 'recents', 'inscrit', 'nb_quizz', 'quizz', 'user_inscrit'));
         }
     }
 

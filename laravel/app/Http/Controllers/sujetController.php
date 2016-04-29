@@ -68,4 +68,11 @@ class sujetController extends Controller
         $cours_slug = Cours::where('id', $request->cours_id)->get()[0]->cours_slug;
         return redirect(route('voir.sujet', [$domaine_slug,$cours_slug, $request->slug]))->with('success', 'Votre post a bien été modifié !');
     }
+
+    public function destroy($id){
+        Sujet::where('id', $id)->delete();
+        Answer::where('sujet_id', $id)->delete();
+        return redirect(view('forums.index'))->with('error','Vous avez supprimé le sujet avec succès !');
+    }
+
 }
